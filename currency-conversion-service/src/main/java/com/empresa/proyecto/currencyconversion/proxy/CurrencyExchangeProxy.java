@@ -5,6 +5,7 @@ import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +20,16 @@ public class CurrencyExchangeProxy {
 
     private static final Logger logger = LoggerFactory.getLogger(CurrencyExchangeProxy.class);
     private final WebClient webClient;
+    private final String exchangeServiceBaseUrl;
 
     int count = 1;
 
-    public CurrencyExchangeProxy(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8081").build();
+    public CurrencyExchangeProxy(
+            WebClient.Builder webClientBuilder,
+            @Value("${currency-exchange-service.base-url}") String exchangeServiceBaseUrl
+    ) {
+        this.exchangeServiceBaseUrl = exchangeServiceBaseUrl;
+        this.webClient = webClientBuilder.baseUrl(exchangeServiceBaseUrl).build();
     }
 
     @Cacheable(value = "currencyConversions", key = "#from + '-' + #to", unless = "#result == null")

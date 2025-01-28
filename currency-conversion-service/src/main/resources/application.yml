@@ -5,7 +5,11 @@ spring:
     name: currency-conversion-service
   cache:
     type: redis
+  data:
     redis:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      password: ${SPRING_REDIS_PASSWORD:1234}
       cache-null-values: true
 resilience4j:
   circuitbreaker:
@@ -26,3 +30,5 @@ resilience4j:
         registerHealthIndicator: true
         maxAttempts: 6
         waitDuration: 1s
+currency-exchange-service:
+  base-url: ${SPRING_EXCHANGE_SERVICE_URL:http://localhost:8081}
