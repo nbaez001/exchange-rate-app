@@ -1,0 +1,28 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: currency-conversion-service
+  cache:
+    type: redis
+    redis:
+      cache-null-values: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      currencyExchangeService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      currencyExchangeService:
+        registerHealthIndicator: true
+        maxAttempts: 6
+        waitDuration: 1s

@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.empresa.proyecto</groupId>
 	<artifactId>exchange-rate-app</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>exchange-rate-app</name>
 	<description>Exchange rate App</description>
 	<packaging>pom</packaging>

@@ -1,0 +1,45 @@
+version: '3.8'
+
+networks:
+  app-network:
+    driver: bridge
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/root/redis
+      - redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_PASSWORD=1234
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=1
+    networks:
+      - app-network
+
+  currency-exchange-service:
+    image: nbaez001/currency-exchange-service:1.0
+    restart: always
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+
+  currency-conversion-service:
+    image: nbaez001/currency-conversion-service:1.0
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - currency-exchange-service
+    networks:
+      - app-network
+
+volumes:
+  redis-data:
+  redis.conf:

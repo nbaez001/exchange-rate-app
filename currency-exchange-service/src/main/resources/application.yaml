@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: currency-exchange-service
+  r2dbc:
+    url: r2dbc:h2:mem:///dbtest
+    username: sa
+    password: 1234
+  sql:
+    init:
+      platform: h2
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
