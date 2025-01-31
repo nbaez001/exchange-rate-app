@@ -1,7 +1,7 @@
 package com.empresa.proyecto.currencyexchange.controller;
 
 import com.empresa.proyecto.currencyexchange.entity.CurrencyExchange;
-import com.empresa.proyecto.currencyexchange.service.CurrencyExchangeService;
+import com.empresa.proyecto.currencyexchange.service.CurrencyExchangeServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class CurrencyExchangeController {
     private final Logger log = LoggerFactory.getLogger(CurrencyExchangeController.class);
 
     @Autowired
-    private CurrencyExchangeService currencyExchangeService;
+    private CurrencyExchangeServiceImpl currencyExchangeService;
 
     /**
      * Retrieves the exchange rate between two currencies.
@@ -41,6 +41,8 @@ public class CurrencyExchangeController {
         log.info("Request: " + from + " to " + to);
         return currencyExchangeService.retrieveExchangeValue(from, to)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.notFound().build())
+                .doOnSuccess(result -> log.info("Currency exchange successful: {}", result))
+                .doOnError(error -> log.error("Currency exchange failed for {} to {}", from, to));
     }
 }

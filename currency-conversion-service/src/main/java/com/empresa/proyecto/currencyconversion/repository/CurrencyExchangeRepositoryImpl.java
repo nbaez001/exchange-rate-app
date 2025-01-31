@@ -1,30 +1,29 @@
-package com.empresa.proyecto.currencyconversion.proxy;
+package com.empresa.proyecto.currencyconversion.repository;
 
-import com.empresa.proyecto.currencyconversion.proxy.dto.CurrencyExchange;
+import com.empresa.proyecto.currencyconversion.repository.dto.CurrencyExchange;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Component
-public class CurrencyExchangeProxy {
+@Repository
+public class CurrencyExchangeRepositoryImpl implements CurrencyExchangeRepository {
 
-    private static final Logger logger = LoggerFactory.getLogger(CurrencyExchangeProxy.class);
+    private static final Logger logger = LoggerFactory.getLogger(CurrencyExchangeRepositoryImpl.class);
     private final WebClient webClient;
     private final String exchangeServiceBaseUrl;
 
     int count = 1;
 
-    public CurrencyExchangeProxy(
+    public CurrencyExchangeRepositoryImpl(
             WebClient.Builder webClientBuilder,
             @Value("${currency-exchange-service.base-url}") String exchangeServiceBaseUrl
     ) {
@@ -32,11 +31,11 @@ public class CurrencyExchangeProxy {
         this.webClient = webClientBuilder.baseUrl(exchangeServiceBaseUrl).build();
     }
 
+    @Override
     @Cacheable(value = "currencyConversions", key = "#from + '-' + #to", unless = "#result == null")
     @Retry(name = "currencyExchangeService")
     @CircuitBreaker(name = "currencyExchangeService", fallbackMethod = "fallbackRetrieveExchangeValue")
-    public Mono<CurrencyExchange> retrieveExchangeValue(@PathVariable String from, @PathVariable String to) {
-        logger.info("Calling currency-exchange service");
+    public Mono<CurrencyExchange> retrieveExchangeValue(String from, String to) {
         logger.info("Calling currency-exchange, called " + (count++) + " times at " + new Date());
         return webClient.get()
                 .uri("/currency-exchange/from/{from}/to/{to}", from, to)

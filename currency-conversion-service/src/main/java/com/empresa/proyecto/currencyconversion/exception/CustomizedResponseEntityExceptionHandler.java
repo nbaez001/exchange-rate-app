@@ -18,8 +18,4 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
         return Mono.just(new ResponseEntity<>(new ErrorDetails(LocalDateTime.now(), ex.getMessage(), ex.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR));
     }
 
-    @ExceptionHandler(ExchangeRateNotFoundException.class)
-    public Mono<ResponseEntity<ErrorDetails>> handleExchangeRateNotFoundExceptions(ExchangeRateNotFoundException ex, ServerWebExchange exchange) {
-        return Mono.just(new ResponseEntity<>(new ErrorDetails(LocalDateTime.now(), "Currency not found", ex.getMessage()), HttpStatus.NOT_FOUND));
-    }
 }

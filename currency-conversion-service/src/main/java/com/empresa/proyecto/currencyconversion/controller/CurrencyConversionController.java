@@ -1,7 +1,9 @@
 package com.empresa.proyecto.currencyconversion.controller;
 
-import com.empresa.proyecto.currencyconversion.entity.CurrencyConversion;
+import com.empresa.proyecto.currencyconversion.dto.CurrencyConversion;
 import com.empresa.proyecto.currencyconversion.service.CurrencyConversionService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,8 @@ import java.math.BigDecimal;
 @RestController
 public class CurrencyConversionController {
 
+    private static final Logger logger = LoggerFactory.getLogger(CurrencyConversionController.class);
+
     @Autowired
     private CurrencyConversionService currencyConversionService;
 
@@ -37,6 +41,8 @@ public class CurrencyConversionController {
                                                                           @PathVariable String to,
                                                                           @PathVariable BigDecimal amount) {
         return currencyConversionService.calculateCurrencyConversion(from, to, amount)
+                .doOnSuccess(result -> logger.info("Currency conversion successful: {}", result))
+                .doOnError(error -> logger.error("Currency conversion failed for {} to {} with amount {}: {}", from, to, amount, error.getMessage()))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }

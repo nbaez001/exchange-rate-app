@@ -21,7 +21,7 @@ class CurrencyExchangeServiceTest {
     private CurrencyExchangeRepository currencyExchangeRepository;
 
     @InjectMocks
-    private CurrencyExchangeService currencyExchangeService;
+    private CurrencyExchangeServiceImpl currencyExchangeService;
 
     private CurrencyExchange mockCurrencyExchange;
 

@@ -1,7 +1,7 @@
 package com.empresa.proyecto.currencyconversion.controller;
 
-import com.empresa.proyecto.currencyconversion.entity.CurrencyConversion;
-import com.empresa.proyecto.currencyconversion.service.CurrencyConversionService;
+import com.empresa.proyecto.currencyconversion.dto.CurrencyConversion;
+import com.empresa.proyecto.currencyconversion.service.CurrencyConversionServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ public class CurrencyConversionControllerTest {
     private WebTestClient webTestClient;
 
     @MockBean
-    private CurrencyConversionService currencyConversionService;
+    private CurrencyConversionServiceImpl currencyConversionService;
 
     @InjectMocks
     private CurrencyConversionController currencyConversionController;

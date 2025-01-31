@@ -1,7 +1,7 @@
 package com.empresa.proyecto.currencyexchange.controller;
 
 import com.empresa.proyecto.currencyexchange.entity.CurrencyExchange;
-import com.empresa.proyecto.currencyexchange.service.CurrencyExchangeService;
+import com.empresa.proyecto.currencyexchange.service.CurrencyExchangeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
@@ -22,7 +22,7 @@ public class CurrencyExchangeControllerTest {
     private WebTestClient webTestClient;
 
     @MockBean
-    private CurrencyExchangeService currencyExchangeService;
+    private CurrencyExchangeServiceImpl currencyExchangeService;
 
     private CurrencyExchange mockCurrencyExchange;
 

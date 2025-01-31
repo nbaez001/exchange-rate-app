@@ -1,8 +1,8 @@
 package com.empresa.proyecto.currencyconversion.service;
 
-import com.empresa.proyecto.currencyconversion.entity.CurrencyConversion;
-import com.empresa.proyecto.currencyconversion.proxy.CurrencyExchangeProxy;
-import com.empresa.proyecto.currencyconversion.proxy.dto.CurrencyExchange;
+import com.empresa.proyecto.currencyconversion.dto.CurrencyConversion;
+import com.empresa.proyecto.currencyconversion.repository.CurrencyExchangeRepositoryImpl;
+import com.empresa.proyecto.currencyconversion.repository.dto.CurrencyExchange;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -19,10 +19,10 @@ import static org.mockito.Mockito.when;
 public class CurrencyConversionServiceTest {
 
     @Mock
-    private CurrencyExchangeProxy currencyExchangeProxy;
+    private CurrencyExchangeRepositoryImpl currencyExchangeProxy;
 
     @InjectMocks
-    private CurrencyConversionService currencyConversionService;
+    private CurrencyConversionServiceImpl currencyConversionService;
 
     @BeforeEach
     public void setup() {

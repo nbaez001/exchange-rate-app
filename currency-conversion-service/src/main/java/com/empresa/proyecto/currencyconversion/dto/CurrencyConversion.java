@@ -1,4 +1,4 @@
-package com.empresa.proyecto.currencyconversion.entity;
+package com.empresa.proyecto.currencyconversion.dto;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
