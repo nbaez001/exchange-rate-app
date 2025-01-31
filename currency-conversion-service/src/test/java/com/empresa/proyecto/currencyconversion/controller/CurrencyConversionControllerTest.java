@@ -47,12 +47,13 @@ public class CurrencyConversionControllerTest {
         String from = "USD";
         String to = "PEN";
         BigDecimal amount = new BigDecimal("1.0");
+        String cupon = "CUPONX";
 
-        when(currencyConversionService.calculateCurrencyConversion(from, to, amount))
+        when(currencyConversionService.calculateCurrencyConversion(from, to, amount, cupon))
                 .thenReturn(Mono.just(mockCurrencyConversion));
 
         webTestClient.get()
-                .uri("/currency-conversion/from/{from}/to/{to}/amount/{amount}", from, to, amount)
+                .uri("/currency-conversion/from/{from}/to/{to}/amount/{amount}/cupon/{cupon}", from, to, amount, cupon)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -67,8 +68,9 @@ public class CurrencyConversionControllerTest {
         String from = "USD";
         String to = "PEN";
         BigDecimal amount = new BigDecimal("1.00");
+        String cupon = "CUPONX";
 
-        when(currencyConversionService.calculateCurrencyConversion(from, to, amount))
+        when(currencyConversionService.calculateCurrencyConversion(from, to, amount, cupon))
                 .thenReturn(Mono.empty());
 
         webTestClient.get()

@@ -36,11 +36,12 @@ public class CurrencyConversionController {
      * @param amount the amount to be converted
      * @return a Mono of CurrencyConversion containing the conversion details
      */
-    @GetMapping("/currency-conversion/from/{from}/to/{to}/amount/{amount}")
+    @GetMapping("/currency-conversion/from/{from}/to/{to}/amount/{amount}/cupon/{cupon}")
     public Mono<ResponseEntity<CurrencyConversion>> getCurrencyConversion(@PathVariable String from,
                                                                           @PathVariable String to,
-                                                                          @PathVariable BigDecimal amount) {
-        return currencyConversionService.calculateCurrencyConversion(from, to, amount)
+                                                                          @PathVariable BigDecimal amount,
+                                                                          @PathVariable String cupon) {
+        return currencyConversionService.calculateCurrencyConversion(from, to, amount, cupon)
                 .doOnSuccess(result -> logger.info("Currency conversion successful: {}", result))
                 .doOnError(error -> logger.error("Currency conversion failed for {} to {} with amount {}: {}", from, to, amount, error.getMessage()))
                 .map(ResponseEntity::ok)

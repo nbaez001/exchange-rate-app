@@ -1,7 +1,9 @@
 package com.empresa.proyecto.currencyconversion.service;
 
 import com.empresa.proyecto.currencyconversion.dto.CurrencyConversion;
+import com.empresa.proyecto.currencyconversion.repository.CuponRepository;
 import com.empresa.proyecto.currencyconversion.repository.CurrencyExchangeRepository;
+import com.empresa.proyecto.currencyconversion.repository.dto.CurrencyExchange;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
     @Autowired
     private CurrencyExchangeRepository currencyExchangeRepository;
 
+    @Autowired
+    private CuponRepository cuponRepository;
+
     /**
      * Calculates the currency conversion for the given parameters.
      *
@@ -37,8 +42,9 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
      * the details of the conversion, including the converted amount and exchange rate.
      */
     @Override
-    public Mono<CurrencyConversion> calculateCurrencyConversion(String from, String to, BigDecimal amount) {
+    public Mono<CurrencyConversion> calculateCurrencyConversion(String from, String to, BigDecimal amount, String cupon) {
         return currencyExchangeRepository.retrieveExchangeValue(from, to)
+                .flatMap(o -> this.obtenerDescuetoXCupon(o, cupon))
                 .map(cu -> new CurrencyConversion(
                         from, to, amount,
                         amount.multiply(cu.getExchangeRate()),
@@ -46,5 +52,14 @@ public class CurrencyConversionServiceImpl implements CurrencyConversionService 
                 )
                 .doOnSuccess(result -> logger.info("Currency conversion result: {}", result))
                 .doOnError(error -> logger.error("Currency conversion failed: {}", error.getMessage()));
+    }
+
+    public Mono<CurrencyExchange> obtenerDescuetoXCupon(CurrencyExchange tc, String cupon) {
+        return cuponRepository.findByCodigo(cupon)
+                .map(o -> {
+                    tc.setExchangeRate(tc.getExchangeRate().add(BigDecimal.ONE));
+                    return tc;
+                })
+                .defaultIfEmpty(tc);
     }
 }

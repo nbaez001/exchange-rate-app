@@ -7,5 +7,5 @@ import java.math.BigDecimal;
 
 public interface CurrencyConversionService {
 
-    Mono<CurrencyConversion> calculateCurrencyConversion(String from, String to, BigDecimal amount);
+    Mono<CurrencyConversion> calculateCurrencyConversion(String from, String to, BigDecimal amount, String cupon);
 }
